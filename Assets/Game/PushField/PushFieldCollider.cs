@@ -1,19 +1,28 @@
-using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(BoxCollider))]
 public class PushFieldCollider : MonoBehaviour
 {
-    public event Action<Collider> OnEnter;
-    public event Action<Collider> OnExit;
-    
-    private void OnTriggerEnter(Collider other)
+    [SerializeField] LayerMask mask = ~0;
+    [SerializeField] QueryTriggerInteraction triggerMode = QueryTriggerInteraction.Ignore;
+
+    BoxCollider box;
+
+    void Awake()
     {
-        OnEnter?.Invoke(other);
+        box = GetComponent<BoxCollider>();
     }
 
-    private void OnTriggerExit(Collider other)
+    public int ColliderTest(Collider[] results)
     {
-        OnExit?.Invoke(other);
+        GetBoxWorld(out var center, out var extents, out var rot);
+        return Physics.OverlapBoxNonAlloc(center, extents, results, rot, mask, triggerMode);
+    }
+
+    void GetBoxWorld(out Vector3 center, out Vector3 extents, out Quaternion rot)
+    {
+        center  = transform.TransformPoint(box.center);
+        extents = Vector3.Scale(box.size, transform.lossyScale) * 0.5f;
+        rot     = transform.rotation;
     }
 }

@@ -44,5 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930fbbfc27e43b14ca3ac2093ffd67dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  spawnOnPress: 50
-  debrisPrefab: {fileID: 2786079556131011871, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
+  spawnOnPress: 2000
+  timeBetweenSpawns: 0.05
+  jitter: 0.01
+  sizeJitter: 0.8
+  debrisPrefabs:
+  - {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
+  - {fileID: 1833742741042004753, guid: 08d6f3580c5001142b77a8da76ef23c9, type: 3}
+  - {fileID: 2808290369795884074, guid: 76ecb4490713c6a4d8b93cd7b33af785, type: 3}

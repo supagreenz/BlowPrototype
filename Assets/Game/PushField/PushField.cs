@@ -4,37 +4,44 @@ using UnityEngine;
 
 public class PushField : MonoBehaviour
 {
-    [SerializeField] private PushFieldCollider _fieldCollider;
+    [SerializeField] private PushFieldCollider fieldCollider;
+    [SerializeField] private float pushForce = 10;
     
-    private HashSet<Debris> _debrisInField = new();
-
+    private readonly Collider[] _colliderBuffer = new Collider[1024];
+    private Transform _thisT;
+    
     private void Awake()
     {
-        if (_fieldCollider)
-        {
-            _fieldCollider.OnEnter += OnEnter;
-            _fieldCollider.OnExit += OnExit;
-        }
-    }
-
-    private void OnEnter(Collider collider)
-    {
-        if (collider.TryGetComponent(out Debris debris))
-        {
-            _debrisInField.Add(debris);
-        }
-    }
-
-    private void OnExit(Collider collider)
-    {
-        if (collider.TryGetComponent(out Debris debris))
-        {
-            _debrisInField.Remove(debris);
-        }
+        _thisT = transform;
     }
 
     private void FixedUpdate()
     {
-        Debug.Log(_debrisInField.Count);
+        RunFieldPushBeat();
+    }
+
+    private void RunFieldPushBeat()
+    {
+        RunCollisionTest();
+        RunPush();
+    }
+
+    private void RunCollisionTest()
+    {
+        if (!fieldCollider) return;
+        int res = fieldCollider.ColliderTest(_colliderBuffer);
+    }
+
+    private void RunPush()
+    {
+        Vector3 cPos = _thisT.position;
+        foreach (var c in _colliderBuffer)
+        {
+            if (!c || !c.TryGetComponent(out Debris debris)) continue;
+            Vector3 dPos = debris.transform.position;
+            Vector3 dn = dPos - cPos;
+            dn = dn.normalized;
+            debris.AddPush(dn.normalized * pushForce);
+        }
     }
 }

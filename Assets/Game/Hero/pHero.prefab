@@ -377,6 +377,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pPushField
       objectReference: {fileID: 0}
+    - target: {fileID: 7525643141165372421, guid: 1ee99c9fbd864ec4bb4ada62d431feae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
