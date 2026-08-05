@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3621065188786290785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6088046092333195147}
+  - component: {fileID: 7781766027961063080}
+  - component: {fileID: -2935805304070509446}
+  m_Layer: 0
+  m_Name: pDebrisBall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6088046092333195147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621065188786290785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5278606813939619794}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7781766027961063080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621065188786290785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64633dcc0290ba42b2a7b21894174e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Debris
+  maxSpeed: 20
+--- !u!114 &-2935805304070509446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621065188786290785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8732ca728f604054ba209d4dc150c121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltBall
+  joltBodyType: 1
 --- !u!1 &3718251874452762894
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,69 +150,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &5572156022983289783
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1813072456794076220, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1813072456794076220, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1813072456794076220, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157188015693179862, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      propertyPath: m_Name
-      value: pDebrisBall
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1813072456794076220, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5278606813939619794}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9157188015693179862, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1511658949310538245}
-  m_SourcePrefab: {fileID: 100100000, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
---- !u!1 &3621065188786290785 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9157188015693179862, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-  m_PrefabInstance: {fileID: 5572156022983289783}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &1511658949310538245
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3621065188786290785}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &6088046092333195147 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1813072456794076220, guid: e2f8700f16f05d94d9725e5d1bb7b651, type: 3}
-  m_PrefabInstance: {fileID: 5572156022983289783}
-  m_PrefabAsset: {fileID: 0}

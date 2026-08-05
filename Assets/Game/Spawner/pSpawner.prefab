@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930fbbfc27e43b14ca3ac2093ffd67dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  spawnOnPress: 2000
+  spawnOnPress: 20
   timeBetweenSpawns: 0.05
   jitter: 0.01
   sizeJitter: 0.8

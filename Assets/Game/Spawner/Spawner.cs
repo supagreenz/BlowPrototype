@@ -8,8 +8,6 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private int spawnOnPress = 50;
     [SerializeField] private float timeBetweenSpawns = 0.1f;
-    [SerializeField] private float jitter = 0.01f;
-    [SerializeField] private float sizeJitter = 0.3f;
 
     [SerializeField] private List<Debris> debrisPrefabs;
     
@@ -21,9 +19,7 @@ public class Spawner : MonoBehaviour
     {
         if (_spawnsLeft > 0 && TimeSinceLastSpawn > timeBetweenSpawns)
         {
-            SpawnRandom();
-            _spawnsLeft--;
-            
+            if (TrySpawnRandom()) _spawnsLeft--;
         }
     }
 
@@ -37,21 +33,16 @@ public class Spawner : MonoBehaviour
     
     private float TimeSinceLastSpawn => Time.time - _lastSpawnTime;
 
-    private void SpawnRandom()
+    private bool TrySpawnRandom()
     {
-        if (debrisPrefabs is not {Count: > 0}) return;
+        if (debrisPrefabs is not {Count: > 0}) return false;
         
         var debrisPrefab = debrisPrefabs[Random.Range(0, debrisPrefabs.Count)];
-        if (!debrisPrefab) return;
+        if (!debrisPrefab) return false;
         
         var newDeb = Instantiate(debrisPrefab, transform);
         
-        newDeb.transform.localPosition += new Vector3(Random.Range(-jitter, jitter), 0, Random.Range(-jitter, jitter));
-        newDeb.transform.localScale += new Vector3(
-            Random.Range(-sizeJitter, sizeJitter),
-            Random.Range(-sizeJitter, sizeJitter),
-            Random.Range(-sizeJitter, sizeJitter));
-        
         _lastSpawnTime = Time.time;
+        return true;
     }
 }
