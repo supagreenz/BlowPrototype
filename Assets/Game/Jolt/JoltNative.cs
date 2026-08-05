@@ -204,6 +204,14 @@ namespace Game.Jolt
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool Jolt_AddForceAtPoint(IntPtr world, uint body, in Vector3 force, in Vector3 point);
 
+        /// <param name="outBodies">
+        /// Pointer to the first element of a pinned uint[], or IntPtr.Zero
+        /// with a zero capacity to count without collecting.
+        /// </param>
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int Jolt_OverlapBox(IntPtr world, in Vector3 center, in Vector3 halfExtent, in Quaternion rotation,
+            IntPtr outBodies, int capacity);
+
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
         public static extern void Jolt_Step(IntPtr world, float deltaTime, int collisionSteps);
 

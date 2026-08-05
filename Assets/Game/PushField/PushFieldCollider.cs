@@ -3,23 +3,21 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class PushFieldCollider : MonoBehaviour
 {
-    [SerializeField] LayerMask mask = ~0;
-    [SerializeField] QueryTriggerInteraction triggerMode = QueryTriggerInteraction.Ignore;
-
     BoxCollider box;
 
     void Awake()
     {
         box = GetComponent<BoxCollider>();
     }
+    
+    //
+    // public int ColliderTest(Collider[] results)
+    // {
+    //     GetBoxWorld(out var center, out var extents, out var rot);
+    //     return Physics.OverlapBoxNonAlloc(center, extents, results, rot, mask, triggerMode);
+    // }
 
-    public int ColliderTest(Collider[] results)
-    {
-        GetBoxWorld(out var center, out var extents, out var rot);
-        return Physics.OverlapBoxNonAlloc(center, extents, results, rot, mask, triggerMode);
-    }
-
-    void GetBoxWorld(out Vector3 center, out Vector3 extents, out Quaternion rot)
+    public void GetColliderBox(out Vector3 center, out Vector3 extents, out Quaternion rot)
     {
         center  = transform.TransformPoint(box.center);
         extents = Vector3.Scale(box.size, transform.lossyScale) * 0.5f;

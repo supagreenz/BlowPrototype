@@ -10,3 +10,13 @@ public struct DebrisDestroyedEvent
 {
     
 }
+
+public struct PushFieldSpawnedEvent
+{
+    public PushField pushField;
+}
+
+public struct PushFieldDestroyedEvent
+{
+    
+}

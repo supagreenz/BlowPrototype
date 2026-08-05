@@ -9,39 +9,34 @@ public class PushField : MonoBehaviour
     
     private readonly Collider[] _colliderBuffer = new Collider[1024];
     private Transform _thisT;
+    private Vector3 cPos;
     
     private void Awake()
     {
         _thisT = transform;
+        
+        EventBus<PushFieldSpawnedEvent>.Raise(new (){pushField = this});
+    }
+
+    private void OnDestroy()
+    {
+        EventBus<PushFieldDestroyedEvent>.Raise(new ());
+    }
+
+    public void GetColliderBox(out Vector3 center, out Vector3 extents, out Quaternion rot)
+    {
+        fieldCollider.GetColliderBox(out center, out extents, out rot);
     }
 
     private void FixedUpdate()
     {
-        RunFieldPushBeat();
+        cPos = _thisT.position;
     }
 
-    private void RunFieldPushBeat()
+    public Vector3 CalculatePushFrom(Vector3 bodyPos)
     {
-        RunCollisionTest();
-        RunPush();
-    }
-
-    private void RunCollisionTest()
-    {
-        if (!fieldCollider) return;
-        int res = fieldCollider.ColliderTest(_colliderBuffer);
-    }
-
-    private void RunPush()
-    {
-        Vector3 cPos = _thisT.position;
-        foreach (var c in _colliderBuffer)
-        {
-            if (!c || !c.TryGetComponent(out JoltBody jBody)) continue;
-            Vector3 dPos = jBody.transform.position;
-            Vector3 dn = dPos - cPos;
-            dn = dn.normalized;
-            jBody.AddPush(dn.normalized * pushForce);
-        }
+        Vector3 dn = bodyPos - cPos;
+        dn = dn.normalized * pushForce;
+        return dn;
     }
 }

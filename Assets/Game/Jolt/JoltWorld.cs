@@ -229,6 +229,46 @@ namespace Game.Jolt
         }
 
         /// <summary>
+        /// Every body whose shape overlaps a box. This is an exact narrow
+        /// phase test against the real shapes, not their bounding boxes.
+        ///
+        /// Results are sorted by slot, so both the set and its order are
+        /// reproducible and safe to use in deterministic logic.
+        /// </summary>
+        /// <param name="results">
+        /// Receives the overlapping handles. Reused across calls; size it to
+        /// the most you expect, since extras beyond its length are dropped.
+        /// </param>
+        /// <param name="rotation">Identity gives an axis aligned box.</param>
+        /// <returns>
+        /// Number of handles written. Equal to results.Length if the buffer
+        /// filled, in which case there may have been more.
+        /// </returns>
+        public int OverlapBox(Vector3 center, Vector3 halfExtent, JoltBodyHandle[] results, Quaternion rotation = default)
+        {
+            ThrowIfDisposed();
+
+            if (results == null || results.Length == 0)
+                return 0;
+
+            if (rotation.x == 0f && rotation.y == 0f && rotation.z == 0f && rotation.w == 0f)
+                rotation = Quaternion.identity;
+
+            // JoltBodyHandle wraps a single uint, so the array is blittable and
+            // the native side can write handles straight into it.
+            GCHandle pin = GCHandle.Alloc(results, GCHandleType.Pinned);
+            try
+            {
+                return JoltNative.Jolt_OverlapBox(_handle, center, halfExtent, rotation,
+                    pin.AddrOfPinnedObject(), results.Length);
+            }
+            finally
+            {
+                pin.Free();
+            }
+        }
+
+        /// <summary>
         /// Advance the simulation. Use a fixed deltaTime: a variable timestep
         /// gives up determinism.
         /// </summary>

@@ -21,6 +21,9 @@ public class JoltEngine : MonoBehaviour
 
     private Dictionary<JoltBodyHandle, JoltBody> _activeBodies = new();
 
+    private PushField _activePushField;
+    private JoltBodyHandle[] _pushFieldBuffer = new JoltBodyHandle[1024];
+
     private void Awake()
     {
         if (_instance && _instance != this)
@@ -33,6 +36,8 @@ public class JoltEngine : MonoBehaviour
         
         EventBus<DebrisSpawnedEvent>.Subscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Subscribe(OnDebrisDestroyed);
+        EventBus<PushFieldSpawnedEvent>.Subscribe(OnPushFieldSpawned);
+        EventBus<PushFieldDestroyedEvent>.Subscribe(OnPushFieldDestroyed);
     }
 
     private void OnDestroy()
@@ -41,6 +46,8 @@ public class JoltEngine : MonoBehaviour
         
         EventBus<DebrisSpawnedEvent>.Unsubscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Unsubscribe(OnDebrisDestroyed);
+        EventBus<PushFieldSpawnedEvent>.Unsubscribe(OnPushFieldSpawned);
+        EventBus<PushFieldDestroyedEvent>.Unsubscribe(OnPushFieldDestroyed);
         
         if (_instance == this) _instance = null;
     }
@@ -68,12 +75,24 @@ public class JoltEngine : MonoBehaviour
     {
         // Read ball and box
         
-        if (_activeWorld == null) return;
+        if (_activeWorld == null || !_activePushField) return;
         
         _activeWorld.Step(Time.fixedDeltaTime);
 
         var states = _activeWorld.ReadStates();
-
+        
+        _activePushField.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
+        int cols = _activeWorld.OverlapBox(center, extents, _pushFieldBuffer, rot);
+        
+        for (int i = 0; i < cols; i++)
+        {
+            var h = _pushFieldBuffer[i];
+            if (_activeWorld.TryGetState(h, out JoltBodyState s))
+            {
+                _activeWorld.AddForce(h, _activePushField.CalculatePushFrom(s.Position));  
+            } 
+        }
+        
         foreach (var t in states)
         {
             var handle = t.Handle;
@@ -94,6 +113,18 @@ public class JoltEngine : MonoBehaviour
     }
 
     private void OnDebrisDestroyed(DebrisDestroyedEvent e)
+    {
+        
+    }
+
+    private void OnPushFieldSpawned(PushFieldSpawnedEvent e)
+    {
+        if (!e.pushField) return;
+        
+        _activePushField = e.pushField;
+    }
+
+    private void OnPushFieldDestroyed(PushFieldDestroyedEvent e)
     {
         
     }

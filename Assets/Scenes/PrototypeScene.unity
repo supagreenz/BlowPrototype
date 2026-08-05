@@ -206,7 +206,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2534013, y: -6.933985e-11, z: 1.816365e-11, w: 0.9673613}
+  m_LocalRotation: {x: 0.2534014, y: 0.00000007762612, z: -0.000000020334252, w: 0.9673612}
   m_LocalPosition: {x: 1.34611, y: 3.842, z: -7.70927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -281,7 +281,7 @@ MonoBehaviour:
     DefaultMode: 2
   DefaultBlend:
     Style: 1
-    Time: 2
+    Time: 0.3
     CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -440,6 +440,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: timeBetweenSpawns
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Name
       value: pSpawner
@@ -549,6 +553,7 @@ GameObject:
   - component: {fileID: 1039561629}
   - component: {fileID: 1039561628}
   - component: {fileID: 1039561634}
+  - component: {fileID: 1039561635}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -768,7 +773,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1039561627}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2534013, y: -5.669598e-11, z: -3.0104433e-11, w: 0.9673613}
+  m_LocalRotation: {x: 0.2534014, y: 0.00000007762612, z: -0.00000002033425, w: 0.9673612}
   m_LocalPosition: {x: 1.34611, y: 3.842, z: -7.70927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -814,6 +819,19 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
+--- !u!114 &1039561635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039561627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1539b1e03b05f8e4f8546762e27c3eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraSwitcher
+  forCam: 0
 --- !u!1 &1817179251
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,6 +843,7 @@ GameObject:
   - component: {fileID: 1817179253}
   - component: {fileID: 1817179252}
   - component: {fileID: 1817179254}
+  - component: {fileID: 1817179255}
   m_Layer: 0
   m_Name: Arena Camera
   m_TagString: Untagged
@@ -909,6 +928,19 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 10, z: -5}
+--- !u!114 &1817179255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817179251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1539b1e03b05f8e4f8546762e27c3eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraSwitcher
+  forCam: 1
 --- !u!1001 &2067477022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -917,6 +949,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2074660805189299877, guid: 6bb9b98aed716fb45bf4fc6307d95567, type: 3}
+      propertyPath: pushForce
+      value: 10000
+      objectReference: {fileID: 0}
     - target: {fileID: 3243425685808009176, guid: 6bb9b98aed716fb45bf4fc6307d95567, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.34611
