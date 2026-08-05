@@ -5,7 +5,10 @@ using UnityEngine;
 public class Debris : MonoBehaviour
 {
 
-    public void AddPush(Vector3 push)
+    private JoltBody _jBody;
+    
+    private void Awake()
     {
+        _jBody = GetComponent<JoltBody>();
     }
 }

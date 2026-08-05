@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4538822854902146241}
   - component: {fileID: 4759005533028113115}
   - component: {fileID: 4607783947967542213}
+  - component: {fileID: 3790373063301440611}
   m_Layer: 0
   m_Name: Ceil
   m_TagString: Untagged
@@ -112,6 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3790373063301440611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733040904980865722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100
 --- !u!1 &1070967770595497246
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +138,7 @@ GameObject:
   - component: {fileID: 5735605749786353538}
   - component: {fileID: 3096417214440977162}
   - component: {fileID: 504461719349719599}
+  - component: {fileID: 2859439472196255614}
   m_Layer: 0
   m_Name: Wall3
   m_TagString: Untagged
@@ -224,6 +239,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2859439472196255614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070967770595497246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100
 --- !u!1 &1143037584391389660
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +264,7 @@ GameObject:
   - component: {fileID: 768120296250496766}
   - component: {fileID: 4739975082775958450}
   - component: {fileID: 2359856654831269712}
+  - component: {fileID: 5050607305706273863}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -336,6 +365,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5050607305706273863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143037584391389660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100
 --- !u!1 &2679635580376106049
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,6 +390,7 @@ GameObject:
   - component: {fileID: 7370479373466603956}
   - component: {fileID: 8457929086761528109}
   - component: {fileID: 1199093938756318596}
+  - component: {fileID: 2529396284371171640}
   m_Layer: 0
   m_Name: Wall2
   m_TagString: Untagged
@@ -448,6 +491,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2529396284371171640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679635580376106049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100
 --- !u!1 &4988219734269540678
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +553,7 @@ GameObject:
   - component: {fileID: 5018327530880344149}
   - component: {fileID: 5448222640389890817}
   - component: {fileID: 4726589105228253905}
+  - component: {fileID: 8702541673559070608}
   m_Layer: 0
   m_Name: Wall1
   m_TagString: Untagged
@@ -597,6 +654,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8702541673559070608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5071132049435905120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100
 --- !u!1 &6860088057734412312
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +679,7 @@ GameObject:
   - component: {fileID: 5524442525458651840}
   - component: {fileID: 702809389967662547}
   - component: {fileID: 4286601900177460290}
+  - component: {fileID: 4490124551264331190}
   m_Layer: 0
   m_Name: Wall4
   m_TagString: Untagged
@@ -709,3 +780,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4490124551264331190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860088057734412312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74e274e1e7e4ecb83755d011ecd4d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JoltWall
+  joltBodyType: 100

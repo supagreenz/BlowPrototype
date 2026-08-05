@@ -37,11 +37,11 @@ public class PushField : MonoBehaviour
         Vector3 cPos = _thisT.position;
         foreach (var c in _colliderBuffer)
         {
-            if (!c || !c.TryGetComponent(out Debris debris)) continue;
-            Vector3 dPos = debris.transform.position;
+            if (!c || !c.TryGetComponent(out JoltBody jBody)) continue;
+            Vector3 dPos = jBody.transform.position;
             Vector3 dn = dPos - cPos;
             dn = dn.normalized;
-            debris.AddPush(dn.normalized * pushForce);
+            jBody.AddPush(dn.normalized * pushForce);
         }
     }
 }

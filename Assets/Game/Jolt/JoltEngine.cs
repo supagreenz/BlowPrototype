@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Jolt;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class JoltEngine : MonoBehaviour
     }
 
     private JoltWorld _activeWorld;
+
+    private Dictionary<JoltBodyHandle, JoltBody> _activeBodies = new();
 
     private void Awake()
     {
@@ -45,7 +48,7 @@ public class JoltEngine : MonoBehaviour
 
     private void InitJoltWorld()
     {
-        _activeWorld = new JoltWorld(1024);
+        _activeWorld = new JoltWorld();
         
         // // Spawn a box
         // _boxHandle = _activeWorld.AddBody(JoltBodyDesc.Box(Vector3.one * 0.5f, Vector3.zero, Quaternion.identity,
@@ -69,21 +72,29 @@ public class JoltEngine : MonoBehaviour
         
         _activeWorld.Step(Time.fixedDeltaTime);
 
-        foreach (var s in _activeWorld.ReadStates())
+        var states = _activeWorld.ReadStates();
+
+        foreach (var t in states)
         {
-            Debug.Log(s.Position);
+            var handle = t.Handle;
+
+            if (_activeBodies.TryGetValue(handle, out var body))
+            {
+                body.StateUpdate(t);
+            }
         }
     }
 
     private void OnDebrisSpawned(DebrisSpawnedEvent e)
     {
-        if (_activeWorld == null) return;
+        if (_activeWorld == null || !e.bodyRef) return;
         
-        _activeWorld.AddBody(e.joltBodyDesc);
+        var bodyHandle = _activeWorld.AddBody(e.joltBodyDesc);
+        _activeBodies[bodyHandle] = e.bodyRef;
     }
 
     private void OnDebrisDestroyed(DebrisDestroyedEvent e)
     {
-        Debug.LogError("Destroys not supported");
+        
     }
 }

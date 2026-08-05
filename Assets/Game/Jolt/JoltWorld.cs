@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using AOT;
 using Unity.Scripting.LifecycleManagement;
+using UnityEngine;
 
 namespace Game.Jolt
 {
@@ -40,6 +41,11 @@ namespace Game.Jolt
         GCHandle _statesHandle;
         IntPtr _statesPtr;
 
+        // Current occupant of each slot, mirroring the native generation
+        // counters. Lets TryGetState reject a stale handle without paying for
+        // a native call per body.
+        readonly uint[] _slotHandles;
+
         /// <summary>Live bodies right now.</summary>
         public int BodyCount => IsValid ? JoltNative.Jolt_GetBodyCount(_handle) : 0;
 
@@ -77,6 +83,10 @@ namespace Game.Jolt
             _states = new JoltBodyState[maxBodies];
             _statesHandle = GCHandle.Alloc(_states, GCHandleType.Pinned);
             _statesPtr = _statesHandle.AddrOfPinnedObject();
+
+            _slotHandles = new uint[maxBodies];
+            for (int i = 0; i < _slotHandles.Length; i++)
+                _slotHandles[i] = JoltBodyHandle.InvalidRaw;
         }
 
         /// <summary>
@@ -92,7 +102,12 @@ namespace Game.Jolt
             ThrowIfDisposed();
 
             JoltBodyDesc local = desc;
-            return new JoltBodyHandle(JoltNative.Jolt_AddBody(_handle, ref local));
+            var body = new JoltBodyHandle(JoltNative.Jolt_AddBody(_handle, ref local));
+
+            if (body.IsValid)
+                _slotHandles[body.Index] = body.Raw;
+
+            return body;
         }
 
         /// <summary>
@@ -103,7 +118,12 @@ namespace Game.Jolt
         public bool RemoveBody(JoltBodyHandle body)
         {
             ThrowIfDisposed();
-            return JoltNative.Jolt_RemoveBody(_handle, body.Raw);
+
+            if (!JoltNative.Jolt_RemoveBody(_handle, body.Raw))
+                return false;
+
+            _slotHandles[body.Index] = JoltBodyHandle.InvalidRaw;
+            return true;
         }
 
         /// <summary>
@@ -112,7 +132,100 @@ namespace Game.Jolt
         /// </summary>
         public bool IsAlive(JoltBodyHandle body)
         {
-            return IsValid && JoltNative.Jolt_IsBodyValid(_handle, body.Raw);
+            // Answered from the managed mirror rather than Jolt_IsBodyValid so
+            // that checking a few thousand handles costs no native calls. The
+            // two are kept in lockstep by AddBody and RemoveBody.
+            return IsValid
+                && body.IsValid
+                && body.Index < _slotHandles.Length
+                && _slotHandles[body.Index] == body.Raw;
+        }
+
+        /// <summary>
+        /// Teleport a body, discontinuously. Use for spawning and respawning;
+        /// driving animation with this skips collision detection between the
+        /// old and new pose.
+        /// </summary>
+        /// <param name="activate">
+        /// Wake the body. False places it without disturbing a settled pile.
+        /// </param>
+        /// <returns>False if the handle is stale.</returns>
+        public bool SetTransform(JoltBodyHandle body, Vector3 position, Quaternion rotation, bool activate = true)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_SetBodyTransform(_handle, body.Raw, position, rotation, activate);
+        }
+
+        /// <summary>
+        /// Drive a kinematic body toward a target over deltaTime. Jolt derives
+        /// the velocity needed to arrive, so the body sweeps and pushes things
+        /// properly instead of tunnelling. This is what to call when following
+        /// a Transform. No effect on non-kinematic bodies.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool MoveKinematic(JoltBodyHandle body, Vector3 position, Quaternion rotation, float deltaTime)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_MoveKinematic(_handle, body.Raw, position, rotation, deltaTime);
+        }
+
+        /// <summary>
+        /// Set velocities directly, e.g. to launch freshly spawned debris.
+        /// Ignored for static bodies. Wakes the body if either velocity is
+        /// non-zero.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool SetVelocity(JoltBodyHandle body, Vector3 linear, Vector3 angular = default)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_SetBodyVelocity(_handle, body.Raw, linear, angular);
+        }
+
+        /// <summary>
+        /// Apply linear and angular impulses about the center of mass. Dynamic
+        /// bodies only; wakes the body.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool AddImpulse(JoltBodyHandle body, Vector3 linear, Vector3 angular = default)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_AddImpulse(_handle, body.Raw, linear, angular);
+        }
+
+        /// <summary>
+        /// Apply a linear impulse at a world space point, which also imparts
+        /// spin. Dynamic bodies only; wakes the body.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool AddImpulseAtPoint(JoltBodyHandle body, Vector3 impulse, Vector3 point)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_AddImpulseAtPoint(_handle, body.Raw, impulse, point);
+        }
+
+        /// <summary>
+        /// Accumulate a force and torque for the next step. Unlike an impulse,
+        /// this is continuous: Jolt scales it by the timestep, and it is
+        /// cleared after every <see cref="Step"/>. Reapply each tick for a
+        /// sustained push. Dynamic bodies only; wakes the body.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool AddForce(JoltBodyHandle body, Vector3 force, Vector3 torque = default)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_AddForce(_handle, body.Raw, force, torque);
+        }
+
+        /// <summary>
+        /// Accumulate a force at a world space point, which also produces
+        /// torque. Cleared after every <see cref="Step"/>. Dynamic bodies
+        /// only; wakes the body.
+        /// </summary>
+        /// <returns>False if the handle is stale.</returns>
+        public bool AddForceAtPoint(JoltBodyHandle body, Vector3 force, Vector3 point)
+        {
+            ThrowIfDisposed();
+            return JoltNative.Jolt_AddForceAtPoint(_handle, body.Raw, force, point);
         }
 
         /// <summary>
@@ -150,18 +263,20 @@ namespace Game.Jolt
         /// <returns>False if the handle is invalid or its body is gone.</returns>
         public bool TryGetState(JoltBodyHandle body, out JoltBodyState state)
         {
+            state = default;
+
             if (!body.IsValid || !IsValid)
-            {
-                state = default;
                 return false;
-            }
 
             int index = body.Index;
             if (index >= _states.Length)
-            {
-                state = default;
                 return false;
-            }
+
+            // Compare the whole handle, generation included. Checking only
+            // that the slot is occupied would hand back the wrong body once a
+            // slot has been recycled.
+            if (_slotHandles[index] != body.Raw)
+                return false;
 
             state = _states[index];
             return state.IsValid;

@@ -100,7 +100,7 @@ namespace Game.Jolt
     }
 
     /// <summary>
-    /// Mirrors JU_BodyState. 56 bytes.
+    /// Mirrors JU_BodyState. 60 bytes.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct JoltBodyState
@@ -111,11 +111,22 @@ namespace Game.Jolt
         public Vector3 AngularVelocity;
         public uint Flags;
 
+        /// <summary>
+        /// Raw handle of this slot's occupant. Prefer <see cref="Handle"/>.
+        /// </summary>
+        public uint RawHandle;
+
         /// <summary>False for a free slot, whose other fields are zeroed.</summary>
         public bool IsValid => (Flags & 1u) != 0u;
 
         /// <summary>True if the body is awake and simulating.</summary>
         public bool IsActive => (Flags & 2u) != 0u;
+
+        /// <summary>
+        /// The body occupying this slot, ready to pass back to JoltWorld.
+        /// Invalid for a free slot.
+        /// </summary>
+        public JoltBodyHandle Handle => new JoltBodyHandle(RawHandle);
     }
 
     /// <summary>
@@ -163,6 +174,35 @@ namespace Game.Jolt
 
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
         public static extern int Jolt_GetSlotCount(IntPtr world);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_SetBodyTransform(IntPtr world, uint body, in Vector3 position, in Quaternion rotation,
+            [MarshalAs(UnmanagedType.I1)] bool activate);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_MoveKinematic(IntPtr world, uint body, in Vector3 position, in Quaternion rotation, float deltaTime);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_SetBodyVelocity(IntPtr world, uint body, in Vector3 linear, in Vector3 angular);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_AddImpulse(IntPtr world, uint body, in Vector3 linear, in Vector3 angular);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_AddImpulseAtPoint(IntPtr world, uint body, in Vector3 impulse, in Vector3 point);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_AddForce(IntPtr world, uint body, in Vector3 force, in Vector3 torque);
+
+        [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool Jolt_AddForceAtPoint(IntPtr world, uint body, in Vector3 force, in Vector3 point);
 
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
         public static extern void Jolt_Step(IntPtr world, float deltaTime, int collisionSteps);
