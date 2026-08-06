@@ -6,16 +6,15 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 /// <summary>
-/// Pushes the results of the last step onto LocalTransform, the counterpart of
-/// JoltBody.StateUpdate.
+/// The update stage: pushes the tick's snapshot onto LocalTransform, the
+/// counterpart of JoltBody.StateUpdate.
 ///
-/// The GameObject path walks the state buffer and looks each body up in a
-/// dictionary. Here it runs the other way round: every entity carries the slot
-/// its body occupies, so writeback is an indexed read per entity and the whole
-/// thing parallelises.
+/// Reads the shared snapshot rather than the world, and reads it by slot: each
+/// entity indexes straight to its own body instead of anyone scanning the
+/// whole buffer looking for owners.
 /// </summary>
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(JoltStepSystem))]
+[UpdateAfter(typeof(JoltReadbackSystem))]
 public partial class JoltWritebackSystem : SystemBase
 {
     private JoltWorldSystem _worldSystem;
@@ -27,20 +26,18 @@ public partial class JoltWritebackSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        JoltWorld jolt = _worldSystem.Jolt;
-        if (jolt == null || !jolt.IsValid) return;
+        int stateCount = _worldSystem.StateCount;
+        if (stateCount == 0) return;
 
-        var states = jolt.ReadStates();
-        if (states.Length == 0) return;
+        // A view of the shared snapshot, not a copy of it.
+        var states = _worldSystem.States.GetSubArray(0, stateCount);
 
-        // ReadStates views a pinned managed buffer that the next read
-        // overwrites, so the job works from its own copy.
-        var stateCopy = new NativeArray<JoltBodyState>(states.Length, Allocator.TempJob,
-            NativeArrayOptions.UninitializedMemory);
-        states.CopyTo(stateCopy.AsSpan());
+        Dependency = new WritebackJob { States = states }.ScheduleParallel(Dependency);
 
-        Dependency = new WritebackJob { States = stateCopy }.ScheduleParallel(Dependency);
-        Dependency = stateCopy.Dispose(Dependency);
+        // Completed here rather than left running: next tick's readback
+        // overwrites this very buffer from the main thread, and JoltEngine
+        // reads it from FixedUpdate on a clock of its own.
+        Dependency.Complete();
     }
 
     [BurstCompile]

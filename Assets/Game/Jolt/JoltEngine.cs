@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class JoltEngine : MonoBehaviour
 {
-    // The world's real capacity lives with its owner; mirroring the number
-    // here would let the overlap buffer silently undersize the world.
-    public static readonly int MaximumWorldBodies = JoltWorldSystem.MaximumWorldBodies;
-    
     [AutoStaticsCleanup] private static JoltEngine _instance;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -33,9 +29,6 @@ public class JoltEngine : MonoBehaviour
     // Bodies raised before the world existed, or since the last drain.
     private List<DebrisSpawnedEvent> _pendingBodies = new();
 
-    private PushField _activePushField;
-    private JoltBodyHandle[] _pushFieldBuffer = new JoltBodyHandle[MaximumWorldBodies];
-
     private void Awake()
     {
         if (_instance && _instance != this)
@@ -46,17 +39,13 @@ public class JoltEngine : MonoBehaviour
 
         EventBus<DebrisSpawnedEvent>.Subscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Subscribe(OnDebrisDestroyed);
-        EventBus<PushFieldSpawnedEvent>.Subscribe(OnPushFieldSpawned);
-        EventBus<PushFieldDestroyedEvent>.Subscribe(OnPushFieldDestroyed);
     }
 
     private void OnDestroy()
     {
         EventBus<DebrisSpawnedEvent>.Unsubscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Unsubscribe(OnDebrisDestroyed);
-        EventBus<PushFieldSpawnedEvent>.Unsubscribe(OnPushFieldSpawned);
-        EventBus<PushFieldDestroyedEvent>.Unsubscribe(OnPushFieldDestroyed);
-        
+
         if (_instance == this) _instance = null;
     }
 
@@ -66,38 +55,33 @@ public class JoltEngine : MonoBehaviour
         var world = ActiveWorld;
         if (world == null || !world.IsValid) return;
 
-        // Unconditional: the arena walls have to reach the world whether or
-        // not a push field exists, and they only ever register once.
+        // The arena walls have to reach the world whether or not anything else
+        // is going on, and they only ever register once.
         DrainPendingBodies(world);
 
-        // JoltStepSystem steps the world. Stepping here as well would advance
-        // the simulation twice per tick.
-        var states = world.ReadStates();
-
-        ApplyPushField(world);
-
-        foreach (var t in states)
-        {
-            if (_activeBodies.TryGetValue(t.Handle, out var body))
-            {
-                body.StateUpdate(t);
-            }
-        }
+        UpdateOwnedBodies();
     }
 
-    private void ApplyPushField(JoltWorld world)
+    /// <summary>
+    /// Reads the shared snapshot for the handful of bodies still driven by a
+    /// MonoBehaviour. Iterates those bodies and indexes the snapshot, rather
+    /// than walking the snapshot looking for owners: the world holds thousands
+    /// of entity bodies that have nothing to do with this.
+    /// </summary>
+    private void UpdateOwnedBodies()
     {
-        if (!_activePushField) return;
+        if (_activeBodies.Count == 0) return;
 
-        _activePushField.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
-        int cols = world.OverlapBox(center, extents, _pushFieldBuffer, rot);
+        var worldSystem = JoltWorldSystem.Instance;
+        if (worldSystem == null) return;
 
-        for (int i = 0; i < cols; i++)
+        foreach (var owned in _activeBodies)
         {
-            var h = _pushFieldBuffer[i];
-            if (world.TryGetState(h, out JoltBodyState s))
+            if (!owned.Value) continue;
+
+            if (worldSystem.TryGetState(owned.Key, out JoltBodyState state))
             {
-                world.AddForce(h, _activePushField.CalculatePushFrom(s.Position));
+                owned.Value.StateUpdate(state);
             }
         }
     }
@@ -129,18 +113,6 @@ public class JoltEngine : MonoBehaviour
 
     private void OnDebrisDestroyed(DebrisDestroyedEvent e)
     {
-        
-    }
 
-    private void OnPushFieldSpawned(PushFieldSpawnedEvent e)
-    {
-        if (!e.pushField) return;
-        
-        _activePushField = e.pushField;
-    }
-
-    private void OnPushFieldDestroyed(PushFieldDestroyedEvent e)
-    {
-        
     }
 }
