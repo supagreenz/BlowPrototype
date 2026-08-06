@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6088046092333195147}
   - component: {fileID: 7781766027961063080}
   - component: {fileID: -2935805304070509446}
+  - component: {fileID: 1248536612094099329}
   m_Layer: 0
   m_Name: pDebrisBall
   m_TagString: Untagged
@@ -46,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64633dcc0290ba42b2a7b21894174e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Debris
-  maxSpeed: 20
 --- !u!114 &-2935805304070509446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,6 +60,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JoltBall
   joltBodyType: 1
+--- !u!114 &1248536612094099329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621065188786290785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05e312993fdcd4f429b507331fd76286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebrisAuthoring
 --- !u!1 &3718251874452762894
 GameObject:
   m_ObjectHideFlags: 0

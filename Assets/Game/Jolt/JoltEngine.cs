@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class JoltEngine : MonoBehaviour
 {
+    public static readonly int MaximumWorldBodies = 2048;
+    
     [AutoStaticsCleanup] private static JoltEngine _instance;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -22,7 +24,7 @@ public class JoltEngine : MonoBehaviour
     private Dictionary<JoltBodyHandle, JoltBody> _activeBodies = new();
 
     private PushField _activePushField;
-    private JoltBodyHandle[] _pushFieldBuffer = new JoltBodyHandle[1024];
+    private JoltBodyHandle[] _pushFieldBuffer = new JoltBodyHandle[MaximumWorldBodies];
 
     private void Awake()
     {
@@ -55,7 +57,7 @@ public class JoltEngine : MonoBehaviour
 
     private void InitJoltWorld()
     {
-        _activeWorld = new JoltWorld();
+        _activeWorld = new JoltWorld(MaximumWorldBodies);
         
         // // Spawn a box
         // _boxHandle = _activeWorld.AddBody(JoltBodyDesc.Box(Vector3.one * 0.5f, Vector3.zero, Quaternion.identity,
