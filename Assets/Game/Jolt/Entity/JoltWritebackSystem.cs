@@ -11,7 +11,7 @@ using Unity.Transforms;
 ///
 /// Reads the shared snapshot rather than the world, and reads it by slot: each
 /// entity indexes straight to its own body instead of anyone scanning the
-/// whole buffer looking for owners.
+/// whole buffer looking for owners. Single pass, main thread, all at once.
 /// </summary>
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateAfter(typeof(JoltReadbackSystem))]
@@ -32,12 +32,11 @@ public partial class JoltWritebackSystem : SystemBase
         // A view of the shared snapshot, not a copy of it.
         var states = _worldSystem.States.GetSubArray(0, stateCount);
 
-        Dependency = new WritebackJob { States = states }.ScheduleParallel(Dependency);
-
-        // Completed here rather than left running: next tick's readback
-        // overwrites this very buffer from the main thread, and JoltEngine
-        // reads it from FixedUpdate on a clock of its own.
-        Dependency.Complete();
+        // Run, not ScheduleParallel. The snapshot is already buffered, so this
+        // is a single pass over it on the main thread — Burst still compiles
+        // the body, and what goes away is the scheduling round trip plus a
+        // pool of Unity workers competing with Jolt's own for the same cores.
+        new WritebackJob { States = states }.Run();
     }
 
     [BurstCompile]

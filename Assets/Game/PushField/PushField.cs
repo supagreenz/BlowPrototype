@@ -14,7 +14,10 @@ public class PushField : MonoBehaviour
     private void Awake()
     {
         _thisT = transform;
-        
+    }
+
+    private void Start()
+    {
         EventBus<PushFieldSpawnedEvent>.Raise(new (){pushField = this});
     }
 

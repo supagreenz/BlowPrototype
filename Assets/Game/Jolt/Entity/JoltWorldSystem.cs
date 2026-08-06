@@ -21,21 +21,25 @@ using Unity.Entities;
 /// </summary>
 public partial class JoltWorldSystem : SystemBase
 {
-    public const int MaximumWorldBodies = 2048;
+    public static readonly int MaximumWorldBodies = 2048;
 
     /// <summary>
-    /// The live world, or null before the ECS world has been created and
-    /// after it has been torn down. MonoBehaviours reach the simulation
-    /// through here; nothing outside this system may dispose it.
+    /// Worker threads Jolt simulates on. Passing 0 would take processor count
+    /// minus one, which sizes Jolt's pool for the whole machine on top of
+    /// Unity's job system doing the same — twice the threads, same cores. Set
+    /// back to 0 to compare.
     /// </summary>
-    public static JoltWorld Active { get; private set; }
+    public const int PhysicsWorkerThreads = 8;
 
     /// <summary>
-    /// The running instance, for the MonoBehaviours that still need to read
-    /// state. Null outside of play.
+    /// The live world, or null once it has been torn down. Nothing outside
+    /// this system may dispose it.
+    ///
+    /// Deliberately not exposed through a static: domain reload is off, so a
+    /// static reference would survive stop play still pointing at a disposed
+    /// world. MonoBehaviours resolve this system through
+    /// World.DefaultGameObjectInjectionWorld instead.
     /// </summary>
-    public static JoltWorldSystem Instance { get; private set; }
-
     public JoltWorld Jolt { get; private set; }
 
     /// <summary>
@@ -52,19 +56,14 @@ public partial class JoltWorldSystem : SystemBase
 
     protected override void OnCreate()
     {
-        Jolt = new JoltWorld(MaximumWorldBodies * 3);
+        Jolt = new JoltWorld(MaximumWorldBodies * 3, PhysicsWorkerThreads);
         _states = new NativeArray<JoltBodyState>(Jolt.Capacity, Allocator.Persistent);
 
-        Active = Jolt;
-        Instance = this;
         Enabled = false;
     }
 
     protected override void OnDestroy()
     {
-        if (ReferenceEquals(Active, Jolt)) Active = null;
-        if (ReferenceEquals(Instance, this)) Instance = null;
-
         if (_states.IsCreated) _states.Dispose();
 
         Jolt?.Dispose();

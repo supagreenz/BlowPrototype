@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Jolt;
+using Unity.Entities;
 using Unity.Scripting.LifecycleManagement;
 using UnityEngine;
 
@@ -17,12 +18,32 @@ public class JoltEngine : MonoBehaviour
         _instance = jeo.AddComponent<JoltEngine>();
     }
 
+    private JoltWorldSystem _worldSystem;
+
     /// <summary>
-    /// The shared world, owned by JoltWorldSystem. Null until the ECS world
-    /// has been created, which is why registrations are queued rather than
-    /// applied where they arrive.
+    /// The system that owns the simulation, resolved on demand and re-resolved
+    /// whenever the ECS world has gone. Null until that world has been
+    /// created, which is why registrations are queued rather than applied
+    /// where they arrive.
+    ///
+    /// Held per instance rather than in a static: domain reload is off, and a
+    /// static would carry a dead world into the next play session.
     /// </summary>
-    private JoltWorld ActiveWorld => JoltWorldSystem.Active;
+    private JoltWorldSystem WorldSystem
+    {
+        get
+        {
+            if (_worldSystem != null && _worldSystem.World is { IsCreated: true })
+                return _worldSystem;
+
+            World world = World.DefaultGameObjectInjectionWorld;
+            _worldSystem = world is { IsCreated: true }
+                ? world.GetExistingSystemManaged<JoltWorldSystem>()
+                : null;
+
+            return _worldSystem;
+        }
+    }
 
     private Dictionary<JoltBodyHandle, JoltBody> _activeBodies = new();
 
@@ -52,14 +73,17 @@ public class JoltEngine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var world = ActiveWorld;
+        var worldSystem = WorldSystem;
+        if (worldSystem == null) return;
+
+        var world = worldSystem.Jolt;
         if (world == null || !world.IsValid) return;
 
         // The arena walls have to reach the world whether or not anything else
         // is going on, and they only ever register once.
         DrainPendingBodies(world);
 
-        UpdateOwnedBodies();
+        UpdateOwnedBodies(worldSystem);
     }
 
     /// <summary>
@@ -68,12 +92,9 @@ public class JoltEngine : MonoBehaviour
     /// than walking the snapshot looking for owners: the world holds thousands
     /// of entity bodies that have nothing to do with this.
     /// </summary>
-    private void UpdateOwnedBodies()
+    private void UpdateOwnedBodies(JoltWorldSystem worldSystem)
     {
         if (_activeBodies.Count == 0) return;
-
-        var worldSystem = JoltWorldSystem.Instance;
-        if (worldSystem == null) return;
 
         foreach (var owned in _activeBodies)
         {

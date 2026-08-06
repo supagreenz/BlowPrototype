@@ -20,16 +20,13 @@ public partial class JoltPushSystem : SystemBase
     private JoltWorldSystem _worldSystem;
 
     private readonly List<PushField> _pushFields = new();
-    private bool _sweptForExistingFields;
 
-    // Sized to the world, not to a copy of the number the world was built
-    // from, so the two cannot drift apart and start dropping overlaps.
     private JoltBodyHandle[] _overlapBuffer;
 
     protected override void OnCreate()
     {
         _worldSystem = World.GetOrCreateSystemManaged<JoltWorldSystem>();
-        _overlapBuffer = new JoltBodyHandle[_worldSystem.Jolt.Capacity];
+        _overlapBuffer = new JoltBodyHandle[JoltWorldSystem.MaximumWorldBodies];
 
         EventBus<PushFieldSpawnedEvent>.Subscribe(OnPushFieldSpawned);
     }
@@ -43,8 +40,6 @@ public partial class JoltPushSystem : SystemBase
     {
         JoltWorld jolt = _worldSystem.Jolt;
         if (jolt == null || !jolt.IsValid) return;
-
-        SweepForExistingFieldsOnce();
 
         for (int i = _pushFields.Count - 1; i >= 0; i--)
         {
@@ -80,26 +75,6 @@ public partial class JoltPushSystem : SystemBase
             {
                 jolt.AddForce(body, field.CalculatePushFrom(state.Position));
             }
-        }
-    }
-
-    /// <summary>
-    /// Picks up the fields that woke before this system existed. PushField
-    /// announces itself once, from Awake, and a system created at ECS world
-    /// bootstrap can miss that announcement entirely. Subscribing covers every
-    /// field from here on; this covers the ones already standing.
-    /// </summary>
-    private void SweepForExistingFieldsOnce()
-    {
-        if (_sweptForExistingFields) return;
-        _sweptForExistingFields = true;
-
-        var existing = Object.FindObjectsByType<PushField>(FindObjectsInactive.Include,
-            FindObjectsSortMode.None);
-
-        for (int i = 0; i < existing.Length; i++)
-        {
-            Register(existing[i]);
         }
     }
 
