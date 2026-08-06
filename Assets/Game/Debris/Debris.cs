@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(JoltBody))]
 public class Debris : MonoBehaviour
 {
-
     private JoltBody _jBody;
     
     private void Awake()
