@@ -57,6 +57,11 @@ public partial class JoltWritebackSystem : SystemBase
             // rejected holds no body at all.
             if (!state.IsValid || state.RawHandle != body.Handle.Raw) return;
 
+            // A sleeping body is exactly where it was last tick. Writing it
+            // again would change nothing but still cost the write, and a
+            // settled pile is the common case here.
+            if (!state.IsActive) return;
+
             transform.Position = new float3(state.Position.x, state.Position.y, state.Position.z);
             transform.Rotation = new quaternion(state.Rotation.x, state.Rotation.y, state.Rotation.z,
                 state.Rotation.w);
