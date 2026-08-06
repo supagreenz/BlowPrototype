@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class JoltEngine : MonoBehaviour
 {
-    public static readonly int MaximumWorldBodies = 2048;
+    // The world's real capacity lives with its owner; mirroring the number
+    // here would let the overlap buffer silently undersize the world.
+    public static readonly int MaximumWorldBodies = JoltWorldSystem.MaximumWorldBodies;
     
     [AutoStaticsCleanup] private static JoltEngine _instance;
 
@@ -19,9 +21,17 @@ public class JoltEngine : MonoBehaviour
         _instance = jeo.AddComponent<JoltEngine>();
     }
 
-    private JoltWorld _activeWorld;
+    /// <summary>
+    /// The shared world, owned by JoltWorldSystem. Null until the ECS world
+    /// has been created, which is why registrations are queued rather than
+    /// applied where they arrive.
+    /// </summary>
+    private JoltWorld ActiveWorld => JoltWorldSystem.Active;
 
     private Dictionary<JoltBodyHandle, JoltBody> _activeBodies = new();
+
+    // Bodies raised before the world existed, or since the last drain.
+    private List<DebrisSpawnedEvent> _pendingBodies = new();
 
     private PushField _activePushField;
     private JoltBodyHandle[] _pushFieldBuffer = new JoltBodyHandle[MaximumWorldBodies];
@@ -34,8 +44,6 @@ public class JoltEngine : MonoBehaviour
             return;
         }
 
-        InitJoltWorld();
-        
         EventBus<DebrisSpawnedEvent>.Subscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Subscribe(OnDebrisDestroyed);
         EventBus<PushFieldSpawnedEvent>.Subscribe(OnPushFieldSpawned);
@@ -44,8 +52,6 @@ public class JoltEngine : MonoBehaviour
 
     private void OnDestroy()
     {
-        DisposeJoltWorld();
-        
         EventBus<DebrisSpawnedEvent>.Unsubscribe(OnDebrisSpawned);
         EventBus<DebrisDestroyedEvent>.Unsubscribe(OnDebrisDestroyed);
         EventBus<PushFieldSpawnedEvent>.Unsubscribe(OnPushFieldSpawned);
@@ -55,63 +61,70 @@ public class JoltEngine : MonoBehaviour
     }
 
 
-    private void InitJoltWorld()
-    {
-        _activeWorld = new JoltWorld(MaximumWorldBodies);
-        
-        // // Spawn a box
-        // _boxHandle = _activeWorld.AddBody(JoltBodyDesc.Box(Vector3.one * 0.5f, Vector3.zero, Quaternion.identity,
-        //     JoltMotion.Static));
-        //
-        // // Spawn a ball
-        // _ballHandle = _activeWorld.AddBody(JoltBodyDesc.Sphere(0.3f, new Vector3(0, 2, 0), JoltMotion.Dynamic));
-    }
-
-    private void DisposeJoltWorld()
-    {
-        _activeWorld?.Dispose();
-        _activeWorld = null;
-    }
-
     private void FixedUpdate()
     {
-        // Read ball and box
-        
-        if (_activeWorld == null || !_activePushField) return;
-        
-        _activeWorld.Step(Time.fixedDeltaTime);
+        var world = ActiveWorld;
+        if (world == null || !world.IsValid) return;
 
-        var states = _activeWorld.ReadStates();
-        
-        _activePushField.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
-        int cols = _activeWorld.OverlapBox(center, extents, _pushFieldBuffer, rot);
-        
-        for (int i = 0; i < cols; i++)
-        {
-            var h = _pushFieldBuffer[i];
-            if (_activeWorld.TryGetState(h, out JoltBodyState s))
-            {
-                _activeWorld.AddForce(h, _activePushField.CalculatePushFrom(s.Position));  
-            } 
-        }
-        
+        // Unconditional: the arena walls have to reach the world whether or
+        // not a push field exists, and they only ever register once.
+        DrainPendingBodies(world);
+
+        // JoltStepSystem steps the world. Stepping here as well would advance
+        // the simulation twice per tick.
+        var states = world.ReadStates();
+
+        ApplyPushField(world);
+
         foreach (var t in states)
         {
-            var handle = t.Handle;
-
-            if (_activeBodies.TryGetValue(handle, out var body))
+            if (_activeBodies.TryGetValue(t.Handle, out var body))
             {
                 body.StateUpdate(t);
             }
         }
     }
 
+    private void ApplyPushField(JoltWorld world)
+    {
+        if (!_activePushField) return;
+
+        _activePushField.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
+        int cols = world.OverlapBox(center, extents, _pushFieldBuffer, rot);
+
+        for (int i = 0; i < cols; i++)
+        {
+            var h = _pushFieldBuffer[i];
+            if (world.TryGetState(h, out JoltBodyState s))
+            {
+                world.AddForce(h, _activePushField.CalculatePushFrom(s.Position));
+            }
+        }
+    }
+
+    private void DrainPendingBodies(JoltWorld world)
+    {
+        if (_pendingBodies.Count == 0) return;
+
+        for (int i = 0; i < _pendingBodies.Count; i++)
+        {
+            var e = _pendingBodies[i];
+            if (!e.bodyRef) continue;
+
+            var bodyHandle = world.AddBody(e.joltBodyDesc);
+            if (bodyHandle.IsValid) _activeBodies[bodyHandle] = e.bodyRef;
+        }
+
+        _pendingBodies.Clear();
+    }
+
     private void OnDebrisSpawned(DebrisSpawnedEvent e)
     {
-        if (_activeWorld == null || !e.bodyRef) return;
-        
-        var bodyHandle = _activeWorld.AddBody(e.joltBodyDesc);
-        _activeBodies[bodyHandle] = e.bodyRef;
+        // Queued rather than added here: JoltBody.Awake can fire before the
+        // ECS world that owns the simulation has been created.
+        if (!e.bodyRef) return;
+
+        _pendingBodies.Add(e);
     }
 
     private void OnDebrisDestroyed(DebrisDestroyedEvent e)

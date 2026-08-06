@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6202530253797505474}
   - component: {fileID: 7251051193085265359}
   - component: {fileID: 293725478934401806}
+  - component: {fileID: 4471902365118843201}
   m_Layer: 0
   m_Name: pEntityBall
   m_TagString: Untagged
@@ -103,3 +104,16 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3891801354827553174}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4471902365118843201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891801354827553174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f8a2d6c91b45e7089acbd2e4f60138a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::JoltBallAuthoring
+  radius: 0.25

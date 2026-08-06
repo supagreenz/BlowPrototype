@@ -3,20 +3,22 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// Pours out the startup batch of debris a few per frame, rather than
+/// instantiating the lot in one tick, so the spawn cost is spread and the
+/// bodies reach Jolt in registerable batches.
+/// </summary>
 [BurstCompile]
 public partial struct DebrisSpawnSystem : ISystem
 {
-
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<DebrisSpawner>();
-        state.RequireForUpdate<DebrisSpawnFlag>();
+        state.RequireForUpdate<DebrisSpawnCounter>();
     }
-    
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
@@ -24,30 +26,27 @@ public partial struct DebrisSpawnSystem : ISystem
             return;
 
         var spawner = SystemAPI.GetComponent<DebrisSpawner>(spawnerEntity);
-        var flag = SystemAPI.GetSingleton<DebrisSpawnFlag>();
+        var counter = SystemAPI.GetComponentRW<DebrisSpawnCounter>(spawnerEntity);
 
-        if (!flag.CanSpawnNow) return;
-        
-        var origin = float3.zero;
+        int remaining = counter.ValueRO.Remaining;
+        if (remaining <= 0) return;
 
-        var e = state.EntityManager.Instantiate(spawner.DebrisPrefab);
-        state.EntityManager.SetComponentData(e, LocalTransform.FromPosition(origin));
-        SystemAPI.SetComponent(spawnerEntity, spawner);
-    }
-}
+        int batch = math.min(spawner.PerFrame, remaining);
 
-[UpdateInGroup(typeof(InitializationSystemGroup))]
-public partial class DebrisSpawnInputReader : SystemBase
-{
-    protected override void OnCreate()
-    {
-        RequireForUpdate<DebrisSpawnFlag>();
-    }
-    
-    protected override void OnUpdate()
-    {
-        var flag = SystemAPI.GetSingleton<DebrisSpawnFlag>();
-        flag.CanSpawnNow = Keyboard.current.pKey.isPressed;
-        SystemAPI.SetSingleton(flag);
+        // Start from the prefab's own transform and move it, rather than
+        // building one from scratch: FromPosition would reset Scale to 1 and
+        // the debris prefabs are authored at 0.5, which their Jolt shapes are
+        // sized to match.
+        var spawnTransform = SystemAPI.GetComponent<LocalTransform>(spawner.DebrisPrefab);
+        spawnTransform.Position = float3.zero;
+
+        var instances = state.EntityManager.Instantiate(spawner.DebrisPrefab, batch, Allocator.Temp);
+        for (int i = 0; i < instances.Length; i++)
+        {
+            state.EntityManager.SetComponentData(instances[i], spawnTransform);
+        }
+        instances.Dispose();
+
+        counter.ValueRW.Remaining = remaining - batch;
     }
 }

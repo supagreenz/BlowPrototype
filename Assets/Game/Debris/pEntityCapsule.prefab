@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6202530253797505474}
   - component: {fileID: 7251051193085265359}
   - component: {fileID: 293725478934401806}
+  - component: {fileID: 4471902365118843203}
   m_Layer: 0
   m_Name: pEntityCapsule
   m_TagString: Untagged
@@ -103,3 +104,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3891801354827553174}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4471902365118843203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891801354827553174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e63f04a7c2b18d5aef31069b47c2d8e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::JoltCapsuleAuthoring
+  halfHeight: 0.2
+  radius: 0.2

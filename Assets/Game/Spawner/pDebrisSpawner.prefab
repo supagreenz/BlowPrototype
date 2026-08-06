@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerAuthoring
   DebrisPrefab: {fileID: 3891801354827553174, guid: c971021057ebf9342af1cde4b3df53a7, type: 3}
+  TotalToSpawn: 2000
+  PerFrame: 1
