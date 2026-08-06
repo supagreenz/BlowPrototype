@@ -14,6 +14,7 @@ public class DebrisSpawnerAuthoring : MonoBehaviour
             {
                 DebrisPrefab = GetEntity(authoring.DebrisPrefab, TransformUsageFlags.Dynamic)
             });
+            AddComponent(entity, new DebrisSpawnFlag());
         }
     }
 }
@@ -21,4 +22,9 @@ public class DebrisSpawnerAuthoring : MonoBehaviour
 public struct DebrisSpawner : IComponentData
 {
     public Entity DebrisPrefab;
+}
+
+public struct DebrisSpawnFlag : IComponentData
+{
+    public bool CanSpawnNow;
 }

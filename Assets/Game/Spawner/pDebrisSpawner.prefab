@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253226ebc52471a459f72b73aecbc134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerAuthoring
-  DebrisPrefab: {fileID: 3621065188786290785, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
+  DebrisPrefab: {fileID: 3891801354827553174, guid: c971021057ebf9342af1cde4b3df53a7, type: 3}
