@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class JoltEngine : MonoBehaviour
 {
-    public static readonly int MaxWorldBodies = 2048;
+    public static readonly int MaxWorldBodies = 4096;
     
     [AutoStaticsCleanup] private static JoltEngine _instance;
 
