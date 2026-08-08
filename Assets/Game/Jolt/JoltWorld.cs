@@ -229,22 +229,29 @@ namespace Game.Jolt
         }
 
         /// <summary>
-        /// Every body whose shape overlaps a box. This is an exact narrow
-        /// phase test against the real shapes, not their bounding boxes.
+        /// Every body whose shape overlaps the given volume. This is an exact
+        /// narrow phase test against the real shapes, not their bounding boxes.
         ///
         /// Results are sorted by slot, so both the set and its order are
         /// reproducible and safe to use in deterministic logic.
+        ///
+        /// Query shapes share the cache with body shapes, so querying the same
+        /// volume every frame allocates nothing after the first call.
         /// </summary>
+        /// <param name="dims">
+        /// Dimensions, interpreted per <see cref="JoltShape"/> exactly as in
+        /// <see cref="JoltBodyDesc.Shape"/>.
+        /// </param>
         /// <param name="results">
         /// Receives the overlapping handles. Reused across calls; size it to
         /// the most you expect, since extras beyond its length are dropped.
         /// </param>
-        /// <param name="rotation">Identity gives an axis aligned box.</param>
+        /// <param name="rotation">Identity gives an axis aligned volume.</param>
         /// <returns>
         /// Number of handles written. Equal to results.Length if the buffer
         /// filled, in which case there may have been more.
         /// </returns>
-        public int OverlapBox(Vector3 center, Vector3 halfExtent, JoltBodyHandle[] results, Quaternion rotation = default)
+        public int OverlapShape(JoltShape shape, Vector3 dims, Vector3 center, JoltBodyHandle[] results, Quaternion rotation = default)
         {
             ThrowIfDisposed();
 
@@ -259,13 +266,24 @@ namespace Game.Jolt
             GCHandle pin = GCHandle.Alloc(results, GCHandleType.Pinned);
             try
             {
-                return JoltNative.Jolt_OverlapBox(_handle, center, halfExtent, rotation,
+                return JoltNative.Jolt_OverlapShape(_handle, (int)shape, dims, center, rotation,
                     pin.AddrOfPinnedObject(), results.Length);
             }
             finally
             {
                 pin.Free();
             }
+        }
+
+        /// <summary>
+        /// Every body overlapping a box. Convenience wrapper over
+        /// <see cref="OverlapShape"/>; identical behaviour and cost.
+        /// </summary>
+        /// <param name="halfExtent">Half extents. All three must be positive.</param>
+        /// <param name="rotation">Identity gives an axis aligned box.</param>
+        public int OverlapBox(Vector3 center, Vector3 halfExtent, JoltBodyHandle[] results, Quaternion rotation = default)
+        {
+            return OverlapShape(JoltShape.Box, halfExtent, center, results, rotation);
         }
 
         /// <summary>

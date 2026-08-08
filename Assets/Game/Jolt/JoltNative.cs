@@ -54,9 +54,9 @@ namespace Game.Jolt
                 Position = position,
                 Rotation = rotation,
                 MotionType = (int)motion,
-                Mass = 0f,
-                Friction = 0.2f,
-                Restitution = 0f,
+                Mass = 1f,
+                Friction = 0.05f,
+                Restitution = 0.25f,
                 GravityFactor = 1f,
                 IsSensor = 0u,
             };
@@ -209,7 +209,7 @@ namespace Game.Jolt
         /// with a zero capacity to count without collecting.
         /// </param>
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int Jolt_OverlapBox(IntPtr world, in Vector3 center, in Vector3 halfExtent, in Quaternion rotation,
+        public static extern int Jolt_OverlapShape(IntPtr world, int shapeType, in Vector3 dims, in Vector3 center, in Quaternion rotation,
             IntPtr outBodies, int capacity);
 
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
