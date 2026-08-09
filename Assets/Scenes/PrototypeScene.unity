@@ -745,9 +745,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 733040904980865722, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1070967770595497246, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1070967770595497246, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1143037584391389660, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1199093938756318596, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_Enabled
@@ -777,6 +789,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2679635580376106049, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2733438505631894708, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_LocalScale.x
       value: 60
@@ -797,9 +813,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: pArena
       objectReference: {fileID: 0}
+    - target: {fileID: 4988219734269540678, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5071132049435905120, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5071132049435905120, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5448222640389890817, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_Enabled
@@ -836,6 +860,10 @@ PrefabInstance:
     - target: {fileID: 6860088057734412312, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6860088057734412312, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7807812577228611141, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_LocalScale.x

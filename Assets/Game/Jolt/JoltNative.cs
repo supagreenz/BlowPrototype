@@ -5,51 +5,6 @@ using UnityEngine;
 namespace Game.Jolt
 {
     /// <summary>
-    /// Mirrors JU_BodyDesc. 68 bytes; Vector3 and Quaternion are already laid
-    /// out as 3 and 4 consecutive floats, so the struct is blittable as is.
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct JoltBodyDesc
-    {
-        public int ShapeType;
-        public Vector3 Shape;
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public int MotionType;
-        public float Mass; // <= 0 computes mass from the shape
-        public float Friction;
-        public float Restitution;
-        public float GravityFactor;
-        public uint IsSensor;
-
-        public static JoltBodyDesc Sphere(float radius, Vector3 position, JoltMotion motion) =>
-            Create(JoltShape.Ball, new Vector3(radius, 0f, 0f), position, Quaternion.identity, motion);
-
-        public static JoltBodyDesc Box(Vector3 halfExtents, Vector3 position, Quaternion rotation, JoltMotion motion) =>
-            Create(JoltShape.Box, halfExtents, position, rotation, motion);
-
-        public static JoltBodyDesc Capsule(float halfHeight, float radius, Vector3 position, Quaternion rotation, JoltMotion motion) =>
-            Create(JoltShape.Capsule, new Vector3(halfHeight, radius, 0f), position, rotation, motion);
-
-        static JoltBodyDesc Create(JoltShape shape, Vector3 dimensions, Vector3 position, Quaternion rotation, JoltMotion motion)
-        {
-            return new JoltBodyDesc
-            {
-                ShapeType = (int)shape,
-                Shape = dimensions,
-                Position = position,
-                Rotation = rotation,
-                MotionType = (int)motion,
-                Mass = 1f,
-                Friction = 0.05f,
-                Restitution = 0.25f,
-                GravityFactor = 1f,
-                IsSensor = 0u,
-            };
-        }
-    }
-
-    /// <summary>
     /// Identifies a body within one world. Packs a slot index and a generation
     /// counter, so a handle to a removed body is rejected rather than silently
     /// addressing whatever reused its slot. Only meaningful in the world that
