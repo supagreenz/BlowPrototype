@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class JoltEngine : MonoBehaviour
 {
-    public static readonly int MaxWorldBodies = 4096;
-    
     [AutoStaticsCleanup] private static JoltEngine _instance;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -48,7 +46,7 @@ public class JoltEngine : MonoBehaviour
 
     private void InitJoltWorld()
     {
-        _activeWorld = new JoltWorld(MaxWorldBodies * 2);
+        _activeWorld = new JoltWorld(JoltConstants.MaxWorldBodies * 2);
     }
 
     private void InitModules()

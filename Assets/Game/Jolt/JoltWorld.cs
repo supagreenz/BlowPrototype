@@ -314,7 +314,7 @@ namespace Game.Jolt
             // Degenerate to a sphere rather than handing Jolt a zero length
             // capsule, which it rejects.
             if (length < 1e-5f)
-                return OverlapShape(JoltShape.Sphere, new Vector3(radius, 0f, 0f), start, results);
+                return OverlapShape(JoltShape.Ball, new Vector3(radius, 0f, 0f), start, results);
 
             return OverlapCapsule(
                 (start + end) * 0.5f,

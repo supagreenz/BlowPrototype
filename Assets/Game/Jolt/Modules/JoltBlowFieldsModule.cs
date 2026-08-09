@@ -9,8 +9,8 @@ public class JoltBlowFieldsModule : IDisposable
     private JoltWorld _activeWorld;
     
     
-    private JoltBodyHandle[] _blowFieldBuffer = new JoltBodyHandle[1024];
-    private List<BlowField> _activeBlowFields = new();
+    private readonly JoltBodyHandle[] _blowFieldBuffer = new JoltBodyHandle[JoltConstants.MaxWorldBodies];
+    private readonly List<BlowField> _activeBlowFields = new();
     
 
     public void Init(JoltWorld joltWorld)

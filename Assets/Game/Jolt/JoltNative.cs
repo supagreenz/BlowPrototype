@@ -4,20 +4,6 @@ using UnityEngine;
 
 namespace Game.Jolt
 {
-    public enum JoltShape
-    {
-        Sphere = 0,  // Shape.x = radius
-        Box = 1,     // Shape = half extents
-        Capsule = 2, // Shape.x = half height of the cylinder, Shape.y = radius
-    }
-
-    public enum JoltMotion
-    {
-        Static = 0,
-        Kinematic = 1,
-        Dynamic = 2,
-    }
-
     /// <summary>
     /// Mirrors JU_BodyDesc. 68 bytes; Vector3 and Quaternion are already laid
     /// out as 3 and 4 consecutive floats, so the struct is blittable as is.
@@ -37,7 +23,7 @@ namespace Game.Jolt
         public uint IsSensor;
 
         public static JoltBodyDesc Sphere(float radius, Vector3 position, JoltMotion motion) =>
-            Create(JoltShape.Sphere, new Vector3(radius, 0f, 0f), position, Quaternion.identity, motion);
+            Create(JoltShape.Ball, new Vector3(radius, 0f, 0f), position, Quaternion.identity, motion);
 
         public static JoltBodyDesc Box(Vector3 halfExtents, Vector3 position, Quaternion rotation, JoltMotion motion) =>
             Create(JoltShape.Box, halfExtents, position, rotation, motion);
