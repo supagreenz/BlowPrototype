@@ -11,12 +11,12 @@ public struct DebrisDestroyedEvent
     
 }
 
-public struct PushFieldSpawnedEvent
+public struct BlowFieldRegisterEvent
 {
-    public PushField pushField;
+    public BlowField BlowField;
 }
 
-public struct PushFieldDestroyedEvent
+public struct BlowFieldUnregisterEvent
 {
-    
+    public BlowField BlowField;
 }

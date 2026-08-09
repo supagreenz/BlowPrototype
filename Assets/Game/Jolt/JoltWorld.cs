@@ -287,6 +287,44 @@ namespace Game.Jolt
         }
 
         /// <summary>
+        /// Every body overlapping a capsule. Convenience wrapper over
+        /// <see cref="OverlapShape"/>; identical behaviour and cost.
+        ///
+        /// The capsule runs along its local Y axis, so an unrotated one stands
+        /// upright. Its total length is 2 * (halfHeight + radius), since the
+        /// hemispherical caps extend past the cylinder on each end.
+        /// </summary>
+        /// <param name="halfHeight">Half length of the cylindrical section.</param>
+        public int OverlapCapsule(Vector3 center, float halfHeight, float radius, JoltBodyHandle[] results, Quaternion rotation = default)
+        {
+            return OverlapShape(JoltShape.Capsule, new Vector3(halfHeight, radius, 0f), center, results, rotation);
+        }
+
+        /// <summary>
+        /// Every body overlapping a capsule spanning two points, with the caps
+        /// bulging radius past each end. This is the form to use for a swept
+        /// volume such as a blower cone or a melee arc, since it works out the
+        /// centre and the Y axis alignment for you.
+        /// </summary>
+        public int OverlapCapsuleBetween(Vector3 start, Vector3 end, float radius, JoltBodyHandle[] results)
+        {
+            Vector3 axis = end - start;
+            float length = axis.magnitude;
+
+            // Degenerate to a sphere rather than handing Jolt a zero length
+            // capsule, which it rejects.
+            if (length < 1e-5f)
+                return OverlapShape(JoltShape.Sphere, new Vector3(radius, 0f, 0f), start, results);
+
+            return OverlapCapsule(
+                (start + end) * 0.5f,
+                length * 0.5f,
+                radius,
+                results,
+                Quaternion.FromToRotation(Vector3.up, axis / length));
+        }
+
+        /// <summary>
         /// Advance the simulation. Use a fixed deltaTime: a variable timestep
         /// gives up determinism.
         /// </summary>

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PushField : MonoBehaviour
+public class BlowField : MonoBehaviour
 {
-    [SerializeField] private PushFieldCollider fieldCollider;
+    [SerializeField] private BlowFieldCollider fieldCollider;
     [SerializeField] private float pushForce = 10;
     
     private readonly Collider[] _colliderBuffer = new Collider[1024];
@@ -15,12 +15,12 @@ public class PushField : MonoBehaviour
     {
         _thisT = transform;
         
-        EventBus<PushFieldSpawnedEvent>.Raise(new (){pushField = this});
+        EventBus<BlowFieldRegisterEvent>.Raise(new (){BlowField = this});
     }
 
     private void OnDestroy()
     {
-        EventBus<PushFieldDestroyedEvent>.Raise(new ());
+        EventBus<BlowFieldUnregisterEvent>.Raise(new (){BlowField = this});
     }
 
     public void GetColliderBox(out Vector3 center, out Vector3 extents, out Quaternion rot)

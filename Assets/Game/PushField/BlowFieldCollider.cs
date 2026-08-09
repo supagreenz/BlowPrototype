@@ -1,11 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class PushFieldCollider : MonoBehaviour
+public class BlowFieldCollider : MonoBehaviour
 {
-    BoxCollider box;
+    private BoxCollider box;
 
-    void Awake()
+    private void Awake()
     {
         box = GetComponent<BoxCollider>();
     }
