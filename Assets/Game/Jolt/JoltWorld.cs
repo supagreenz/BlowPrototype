@@ -238,36 +238,28 @@ namespace Game.Jolt
         /// Query shapes share the cache with body shapes, so querying the same
         /// volume every frame allocates nothing after the first call.
         /// </summary>
-        /// <param name="dims">
-        /// Dimensions, interpreted per <see cref="JoltShape"/> exactly as in
-        /// <see cref="JoltBodyDesc.Shape"/>.
-        /// </param>
+        /// <param name="pose">The query volume: its shape, position and orientation.</param>
         /// <param name="results">
         /// Receives the overlapping handles. Reused across calls; size it to
         /// the most you expect, since extras beyond its length are dropped.
         /// </param>
-        /// <param name="rotation">Identity gives an axis aligned volume.</param>
         /// <returns>
         /// Number of handles written. Equal to results.Length if the buffer
         /// filled, in which case there may have been more.
         /// </returns>
-        public int OverlapShape(JoltShape shape, Vector3 dims, Vector3 center, JoltBodyHandle[] results, Quaternion rotation = default)
+        public int OverlapShape(in JoltShapePose pose, JoltBodyHandle[] results)
         {
             ThrowIfDisposed();
 
             if (results == null || results.Length == 0)
                 return 0;
 
-            if (rotation.x == 0f && rotation.y == 0f && rotation.z == 0f && rotation.w == 0f)
-                rotation = Quaternion.identity;
-
             // JoltBodyHandle wraps a single uint, so the array is blittable and
             // the native side can write handles straight into it.
             GCHandle pin = GCHandle.Alloc(results, GCHandleType.Pinned);
             try
             {
-                return JoltNative.Jolt_OverlapShape(_handle, (int)shape, dims, center, rotation,
-                    pin.AddrOfPinnedObject(), results.Length);
+                return JoltNative.Jolt_OverlapShape(_handle, in pose, pin.AddrOfPinnedObject(), results.Length);
             }
             finally
             {
@@ -283,7 +275,7 @@ namespace Game.Jolt
         /// <param name="rotation">Identity gives an axis aligned box.</param>
         public int OverlapBox(Vector3 center, Vector3 halfExtent, JoltBodyHandle[] results, Quaternion rotation = default)
         {
-            return OverlapShape(JoltShape.Box, halfExtent, center, results, rotation);
+            return OverlapShape(new JoltShapePose(JoltShapeData.Box(halfExtent), center, rotation), results);
         }
 
         /// <summary>
@@ -297,7 +289,7 @@ namespace Game.Jolt
         /// <param name="halfHeight">Half length of the cylindrical section.</param>
         public int OverlapCapsule(Vector3 center, float halfHeight, float radius, JoltBodyHandle[] results, Quaternion rotation = default)
         {
-            return OverlapShape(JoltShape.Capsule, new Vector3(halfHeight, radius, 0f), center, results, rotation);
+            return OverlapShape(new JoltShapePose(JoltShapeData.Capsule(halfHeight, radius), center, rotation), results);
         }
 
         /// <summary>
@@ -314,7 +306,7 @@ namespace Game.Jolt
             // Degenerate to a sphere rather than handing Jolt a zero length
             // capsule, which it rejects.
             if (length < 1e-5f)
-                return OverlapShape(JoltShape.Ball, new Vector3(radius, 0f, 0f), start, results);
+                return OverlapShape(new JoltShapePose(JoltShapeData.Ball(radius), start, Quaternion.identity), results);
 
             return OverlapCapsule(
                 (start + end) * 0.5f,

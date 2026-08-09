@@ -119,7 +119,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6452074634493165155}
+  - {fileID: 6836303220336687533}
   m_Father: {fileID: 8018749588112347287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5091766699570060365
@@ -353,7 +353,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1001 &7583626881278533818
+--- !u!1001 &7956530454414681972
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -375,19 +375,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5051818123779306606, guid: 1ee99c9fbd864ec4bb4ada62d431feae, type: 3}
       propertyPath: m_Name
-      value: pPushField
-      objectReference: {fileID: 0}
-    - target: {fileID: 7525643141165372421, guid: 1ee99c9fbd864ec4bb4ada62d431feae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: pRegularBlower
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ee99c9fbd864ec4bb4ada62d431feae, type: 3}
---- !u!4 &6452074634493165155 stripped
+--- !u!4 &6836303220336687533 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3509478138812833497, guid: 1ee99c9fbd864ec4bb4ada62d431feae, type: 3}
-  m_PrefabInstance: {fileID: 7583626881278533818}
+  m_PrefabInstance: {fileID: 7956530454414681972}
   m_PrefabAsset: {fileID: 0}

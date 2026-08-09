@@ -6,19 +6,18 @@ public class JoltBall : JoltBody
     protected override JoltBodyDesc ConstructJoltBodyDesc()
     {
         return new JoltBodyDesc
-        {
-            ShapePose = GetInitialPose(),
-            MotionType = JoltMotion.Dynamic,
-            Mass = 1f,
-            Friction = 0.05f,
-            Restitution = 0.25f,
-            GravityFactor = 1f,
-            IsSensor = 0u,
-        };
+        (
+            GetInitialPose(),
+            JoltMotion.Dynamic,
+            1f,
+            0.3f,
+            0.25f,
+            1f
+        );
     }
 
     private JoltShapePose GetInitialPose()
     {
-        return JoltShapePose.Create(JoltShapeData.Ball(0.5f), transform.position, Quaternion.identity);
+        return new JoltShapePose(JoltShapeData.Ball(0.5f), transform.position, Quaternion.identity);
     }
 }

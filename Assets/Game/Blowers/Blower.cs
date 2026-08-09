@@ -1,4 +1,5 @@
 using System;
+using Game.Jolt;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -8,15 +9,16 @@ public abstract class Blower : MonoBehaviour
     [SerializeField] protected float pushForce = 10;
     
     protected Transform ThisT;
+    protected Vector3 CPos;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         ThisT = transform;
         
         EventBus<BlowerRegisterEvent>.Raise(new (){Blower = this});
     }
 
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
         if (!mainCollider)
         {
@@ -28,4 +30,12 @@ public abstract class Blower : MonoBehaviour
     {
         EventBus<BlowerUnregisterEvent>.Raise(new (){Blower = this});
     }
+
+    protected virtual void FixedUpdate()
+    {
+        CPos = ThisT.position;
+    }
+
+    public abstract JoltShapePose GetCurrentShapeTest();
+    public abstract Vector3 CalculatePushAt(Vector3 at);
 }

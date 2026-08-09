@@ -30,7 +30,7 @@ public class JoltBlowersModule : IDisposable
 
     public void UpdateStep()
     {
-        foreach (var bf in _activeBlowers)
+        foreach (Blower bf in _activeBlowers)
         {
             // bf.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
             // int cols = _activeWorld.OverlapBox(center, extents, _blowerColBuffer, rot);
@@ -43,8 +43,17 @@ public class JoltBlowersModule : IDisposable
             //         _activeWorld.AddForce(h, bf.CalculatePushFrom(s.Position));  
             //     } 
             // }
-            
-            int cols = _activeWorld.OverlapShape()
+
+            int cols = _activeWorld.OverlapShape(bf.GetCurrentShapeTest(), _blowerColBuffer);
+
+            for (int i = 0; i < cols; i++)
+            {
+                var h = _blowerColBuffer[i];
+                if (_activeWorld.TryGetState(h, out JoltBodyState s))
+                {
+                    _activeWorld.AddForceAtPoint(h, bf.CalculatePushAt(s.Position), s.Position + (Vector3.down * 0.1f));
+                }
+            }
         }
     }
     
