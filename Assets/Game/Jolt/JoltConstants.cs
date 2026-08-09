@@ -15,36 +15,63 @@ namespace Game.Jolt
     /// out as 3 and 4 consecutive floats, so the struct is blittable as is.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct JoltBodyDesc
+    public readonly struct JoltBodyDesc
     {
-        public JoltShapePose ShapePose;
-        public JoltMotion MotionType;
-        public float Mass; // <= 0 computes mass from the shape
-        public float Friction;
-        public float Restitution;
-        public float GravityFactor;
-        public uint IsSensor;
+        public readonly JoltShapePose ShapePose;
+        public readonly JoltMotion MotionType;
+        public readonly float Mass; // <= 0 computes mass from the shape
+        public readonly float Friction;
+        public readonly float Restitution;
+        public readonly float GravityFactor;
+        public readonly uint IsSensor;
+        
+        public JoltBodyDesc(
+            JoltShapePose shapePose,
+            JoltMotion motionType,
+            float mass = 0f,
+            float friction = 0.2f,
+            float restitution = 0f,
+            float gravityFactor = 1f,
+            bool isSensor = false)
+        {
+            ShapePose = shapePose;
+            MotionType = motionType;
+            Mass = mass;
+            Friction = friction;
+            Restitution = restitution;
+            GravityFactor = gravityFactor;
+            IsSensor = isSensor ? 1u : 0u;
+        }
     }
     
-    public struct JoltShapePose
+    public readonly struct JoltShapePose
     {
-        public JoltShapeData ShapeData;
-        public Vector3 Position;
-        public Quaternion Rotation;
-        
-        public static JoltShapePose Create(JoltShapeData shapeData, Vector3 position, Quaternion rotation) => 
-            new () { ShapeData = shapeData, Position = position, Rotation = rotation };
+        public readonly JoltShapeData ShapeData;
+        public readonly Vector3 Position;
+        public readonly Quaternion Rotation;
+
+        public JoltShapePose(JoltShapeData shapeData, Vector3 position, Quaternion rotation)
+        {
+            ShapeData = shapeData;
+            Position = position;
+            Rotation = rotation is { x: 0f, y: 0f, z: 0f, w: 0f } ? Quaternion.identity : rotation;
+        }
     }
     
     public struct JoltShapeData
     {
-        public JoltShape Shape;
-        public float A, B, C;
+        public readonly JoltShape Shape;
+        public readonly float A, B, C;
 
-        public static JoltShapeData Ball(float radius) => new () { Shape = JoltShape.Ball, A = radius };
-        public static JoltShapeData Box(float halfX, float halfY, float halfZ) => new () { Shape = JoltShape.Box, A = halfX, B = halfY, C = halfZ };
-        public static JoltShapeData Box(Vector3 halfEx) => new () { Shape = JoltShape.Box, A = halfEx.x, B = halfEx.y, C = halfEx.z };
-        public static JoltShapeData Capsule(float halfH, float radius) => new () { Shape = JoltShape.Capsule, A = halfH, B = radius };
+        public static JoltShapeData Ball(float radius) => new(JoltShape.Ball, radius);
+        public static JoltShapeData Box(float halfX, float halfY, float halfZ) => new(JoltShape.Box, halfX, halfY, halfZ);
+        public static JoltShapeData Box(Vector3 halfEx) => new (JoltShape.Box, halfEx.x, halfEx.y, halfEx.z);
+        public static JoltShapeData Capsule(float halfH, float radius) => new (JoltShape.Capsule, halfH, radius);
+
+        public JoltShapeData(JoltShape shape, float a = 0, float b = 0, float c = 0)
+        {
+            Shape = shape; A = a; B = b; C = c;
+        }
     }
 
     public enum JoltShape

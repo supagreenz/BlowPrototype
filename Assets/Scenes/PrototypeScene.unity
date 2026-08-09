@@ -450,11 +450,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -503,11 +507,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -608,11 +616,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -661,11 +673,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -714,11 +730,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -763,7 +783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1199093938756318596, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1362814222076836958, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_LocalScale.z
@@ -783,7 +803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2529396284371171640, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2679635580376106049, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
       propertyPath: m_IsActive
@@ -885,8 +905,7 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -35
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2529396284371171640, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8703394717270018343, guid: 72eba170fb7d8f14cb7d4c2b2ac6c259, type: 3}
     m_AddedGameObjects: []
@@ -1220,11 +1239,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -1273,11 +1296,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -1435,11 +1462,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: spawnOnPress
-      value: 30
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: timeBetweenSpawns
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
@@ -1462,6 +1493,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1166871101422736107, guid: 6bb9b98aed716fb45bf4fc6307d95567, type: 3}
+      propertyPath: pushForce
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2074660805189299877, guid: 6bb9b98aed716fb45bf4fc6307d95567, type: 3}
       propertyPath: pushForce
       value: 100

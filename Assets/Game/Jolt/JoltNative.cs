@@ -44,24 +44,24 @@ namespace Game.Jolt
     /// Mirrors JU_BodyState. 60 bytes.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct JoltBodyState
+    public readonly struct JoltBodyState
     {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector3 LinearVelocity;
-        public Vector3 AngularVelocity;
-        public uint Flags;
+        public readonly Vector3 Position;
+        public readonly Quaternion Rotation;
+        public readonly Vector3 LinearVelocity;
+        public readonly Vector3 AngularVelocity;
+        public readonly uint Flags;
 
         /// <summary>
         /// Raw handle of this slot's occupant. Prefer <see cref="Handle"/>.
         /// </summary>
-        public uint RawHandle;
+        public readonly uint RawHandle;
 
         /// <summary>False for a free slot, whose other fields are zeroed.</summary>
-        public bool IsValid => (Flags & 1u) != 0u;
+        public readonly bool IsValid => (Flags & 1u) != 0u;
 
         /// <summary>True if the body is awake and simulating.</summary>
-        public bool IsActive => (Flags & 2u) != 0u;
+        public readonly bool IsActive => (Flags & 2u) != 0u;
 
         /// <summary>
         /// The body occupying this slot, ready to pass back to JoltWorld.
@@ -150,8 +150,7 @@ namespace Game.Jolt
         /// with a zero capacity to count without collecting.
         /// </param>
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int Jolt_OverlapShape(IntPtr world, int shapeType, in Vector3 dims, in Vector3 center, in Quaternion rotation,
-            IntPtr outBodies, int capacity);
+        public static extern int Jolt_OverlapShape(IntPtr world, in JoltShapePose pose, IntPtr outBodies, int capacity);
 
         [DllImport(Dll, CallingConvention = CallingConvention.Cdecl)]
         public static extern void Jolt_Step(IntPtr world, float deltaTime, int collisionSteps);
