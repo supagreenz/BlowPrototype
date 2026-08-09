@@ -21,7 +21,7 @@ public class JoltEngine : MonoBehaviour
     
     // MODULES
     private JoltPhysicalBodiesModule _physicalBodiesModule;
-    private JoltBlowFieldsModule _blowFieldsModule;
+    private JoltBlowersModule _blowersModule;
 
     private void Awake()
     {
@@ -54,8 +54,8 @@ public class JoltEngine : MonoBehaviour
         _physicalBodiesModule = new JoltPhysicalBodiesModule();
         _physicalBodiesModule.Init(_activeWorld);
 
-        _blowFieldsModule = new JoltBlowFieldsModule();
-        _blowFieldsModule.Init(_activeWorld);
+        _blowersModule = new JoltBlowersModule();
+        _blowersModule.Init(_activeWorld);
     }
 
     private void DisposeJoltWorld()
@@ -69,8 +69,8 @@ public class JoltEngine : MonoBehaviour
         _physicalBodiesModule?.Dispose();
         _physicalBodiesModule = null;
         
-        _blowFieldsModule?.Dispose();
-        _blowFieldsModule = null;
+        _blowersModule?.Dispose();
+        _blowersModule = null;
     }
 
     private void FixedUpdate()
@@ -81,7 +81,7 @@ public class JoltEngine : MonoBehaviour
         
         _activeWorld.Step(Time.fixedDeltaTime);
         
-        _blowFieldsModule.UpdateStep();
+        _blowersModule.UpdateStep();
         _physicalBodiesModule.UpdateStep();
     }
 }

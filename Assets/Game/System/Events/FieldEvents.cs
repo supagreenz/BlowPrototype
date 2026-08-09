@@ -11,12 +11,12 @@ public struct DebrisDestroyedEvent
     
 }
 
-public struct BlowFieldRegisterEvent
+public struct BlowerRegisterEvent
 {
-    public BlowField BlowField;
+    public Blower Blower;
 }
 
-public struct BlowFieldUnregisterEvent
+public struct BlowerUnregisterEvent
 {
-    public BlowField BlowField;
+    public Blower Blower;
 }
