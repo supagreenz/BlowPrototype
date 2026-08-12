@@ -44,6 +44,7 @@ public class JoltBlowersModule : IDisposable
             //         _activeWorld.AddForce(h, bf.CalculatePushFrom(s.Position));  
             //     } 
             // }
+            if (!bf.IsActive) continue;
 
             int cols = _activeWorld.OverlapShape(bf.GetCurrentShapeTest(), _blowerColBuffer);
             //bf.CalculatePushesAt(cols, _blowerColBuffer, _totalForces, states);
@@ -51,8 +52,10 @@ public class JoltBlowersModule : IDisposable
             for (int i = 0; i < cols; i++)
             {
                 var h = _blowerColBuffer[i];
-                _activeWorld.AddForceAtPoint(h, 
-                    bf.CalculatePushAt(states[i].Position), states[i].Position + (Vector3.down * 0.1f));
+                _activeWorld.AddForce(h, 
+                    bf.CalculatePushAt(states[i].Position));
+                // _activeWorld.AddForceAtPoint(h, 
+                //     bf.CalculatePushAt(states[i].Position), states[i].Position + (Vector3.down * 0.1f));
             }
         }
     }

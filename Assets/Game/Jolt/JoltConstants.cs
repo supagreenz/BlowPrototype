@@ -79,6 +79,8 @@ namespace Game.Jolt
         Ball = 0,  // Shape.x = radius
         Box = 1,     // Shape = half extents
         Capsule = 2, // Shape.x = half height of the cylinder, Shape.y = radius
+        
+        Invalid = 255,
     }
 
     public enum JoltMotion

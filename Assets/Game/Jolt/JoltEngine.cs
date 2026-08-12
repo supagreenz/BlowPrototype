@@ -83,22 +83,26 @@ public class JoltEngine : MonoBehaviour
         if (_activeWorld == null) return;
         
         Stopwatch sw = Stopwatch.StartNew();
-        TimeSpan step, blower, body;
+        TimeSpan step, blower, body, stateRead;
         
         _activeWorld.Step(Time.fixedDeltaTime);
         step = sw.Elapsed;
         sw.Restart();
         
         var states = _activeWorld.ReadStates();
+        stateRead = sw.Elapsed;
+        sw.Restart();
         
         _blowersModule.UpdateStep(states);
         blower = sw.Elapsed;
         sw.Restart();
+        
         _physicalBodiesModule.UpdateStep(states);
         body = sw.Elapsed;
         sw.Restart();
         
-        Debug.Log($"Took Step: {step.TotalMilliseconds}ms, Blower: {blower.TotalMilliseconds}ms, Bodies: {body.TotalMilliseconds}ms");
+        Debug.Log($"Took Step: {step.TotalMilliseconds}ms, StateRead: {stateRead.TotalMilliseconds}," +
+                  $" Blower: {blower.TotalMilliseconds}ms, Bodies: {body.TotalMilliseconds}ms");
         sw.Stop();
     }
 }
