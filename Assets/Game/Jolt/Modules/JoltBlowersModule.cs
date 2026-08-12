@@ -9,6 +9,7 @@ public class JoltBlowersModule : IDisposable
     private JoltWorld _activeWorld;
     
     private readonly JoltBodyHandle[] _blowerColBuffer = new JoltBodyHandle[JoltConstants.MaxWorldBodies];
+    private readonly Vector3[] _totalForces = new Vector3[JoltConstants.MaxWorldBodies];
     private readonly List<Blower> _activeBlowers = new();
     
 
@@ -28,7 +29,7 @@ public class JoltBlowersModule : IDisposable
         EventBus<BlowerUnregisterEvent>.Unsubscribe(OnPushFieldDestroyed);
     }
 
-    public void UpdateStep()
+    public void UpdateStep(ReadOnlySpan<JoltBodyState> states)
     {
         foreach (Blower bf in _activeBlowers)
         {
@@ -45,14 +46,13 @@ public class JoltBlowersModule : IDisposable
             // }
 
             int cols = _activeWorld.OverlapShape(bf.GetCurrentShapeTest(), _blowerColBuffer);
-
+            //bf.CalculatePushesAt(cols, _blowerColBuffer, _totalForces, states);
+            
             for (int i = 0; i < cols; i++)
             {
                 var h = _blowerColBuffer[i];
-                if (_activeWorld.TryGetState(h, out JoltBodyState s))
-                {
-                    _activeWorld.AddForceAtPoint(h, bf.CalculatePushAt(s.Position), s.Position + (Vector3.down * 0.1f));
-                }
+                _activeWorld.AddForceAtPoint(h, 
+                    bf.CalculatePushAt(states[i].Position), states[i].Position + (Vector3.down * 0.1f));
             }
         }
     }

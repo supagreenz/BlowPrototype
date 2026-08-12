@@ -10,6 +10,7 @@ public abstract class Blower : MonoBehaviour
     
     protected Transform ThisT;
     protected Vector3 CPos;
+    protected Vector3 CForward;
 
     protected virtual void Awake()
     {
@@ -34,8 +35,10 @@ public abstract class Blower : MonoBehaviour
     protected virtual void FixedUpdate()
     {
         CPos = ThisT.position;
+        CForward = ThisT.forward;
     }
 
     public abstract JoltShapePose GetCurrentShapeTest();
     public abstract Vector3 CalculatePushAt(Vector3 at);
+    public abstract void CalculatePushesAt(int collisions, JoltBodyHandle[] bodies, Vector3[] forcesBuffer, ReadOnlySpan<JoltBodyState> statesBuffer);
 }

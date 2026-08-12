@@ -37,10 +37,8 @@ public class JoltPhysicalBodiesModule : IDisposable
         _activeWorld = null;
     }
 
-    public void UpdateStep()
+    public void UpdateStep(ReadOnlySpan<JoltBodyState> states)
     {
-        var states = _activeWorld.ReadStates();
-
         states.CopyTo(_bodyStateBuffer.GetSubArray(0, states.Length).AsSpan());
 
         new MoveBodiesJob
