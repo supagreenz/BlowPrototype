@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+public static class HeroTest
+{
+    public static Vector3 HeroPos;
+}
+
 public class Hero : MonoBehaviour
 {
     
@@ -14,6 +19,7 @@ public class Hero : MonoBehaviour
     
     private CharacterController _controller;
     private Camera _camRef;
+    private Transform _thisT;
     
     
     private float _currentSpeed = 0f;
@@ -21,6 +27,7 @@ public class Hero : MonoBehaviour
     private void Awake()
     {
         _camRef = Camera.main;
+        _thisT = transform;
         _controller = GetComponent<CharacterController>();
         
         Cursor.lockState = CursorLockMode.Locked;
@@ -55,7 +62,9 @@ public class Hero : MonoBehaviour
         if (moveDir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            _thisT.rotation = Quaternion.RotateTowards(_thisT.rotation, targetRotation, turnSpeed * Time.deltaTime);
         }
+        
+        HeroTest.HeroPos = _thisT.position;
     }
 }

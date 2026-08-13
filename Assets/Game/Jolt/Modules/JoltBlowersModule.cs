@@ -46,6 +46,12 @@ public class JoltBlowersModule : IDisposable
                 //     bf.CalculatePushAt(states[i].Position), states[i].Position + (Vector3.down * 0.1f));
             }
         }
+
+        for (int i = 0; i < states.Length; ++i)
+        {
+            var dir = (HeroTest.HeroPos - states[i].Position).normalized;
+            _activeWorld.AddForce(states[i].Handle, dir * 10f);
+        }
     }
     
     private void OnPushFieldSpawned(BlowerRegisterEvent e)
