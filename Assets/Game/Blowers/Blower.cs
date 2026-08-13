@@ -71,5 +71,5 @@ public abstract class Blower : MonoBehaviour
 public enum BlowerStatus
 {
     Activated,
-    Deactivated,
+    Deactivated
 }

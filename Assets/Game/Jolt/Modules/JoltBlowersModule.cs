@@ -11,7 +11,6 @@ public class JoltBlowersModule : IDisposable
     private readonly JoltBodyHandle[] _blowerColBuffer = new JoltBodyHandle[JoltConstants.MaxWorldBodies];
     private readonly Vector3[] _totalForces = new Vector3[JoltConstants.MaxWorldBodies];
     private readonly List<Blower> _activeBlowers = new();
-    
 
     public void Init(JoltWorld joltWorld)
     {
@@ -33,17 +32,6 @@ public class JoltBlowersModule : IDisposable
     {
         foreach (Blower bf in _activeBlowers)
         {
-            // bf.GetColliderBox(out var center, out Vector3 extents, out Quaternion rot);
-            // int cols = _activeWorld.OverlapBox(center, extents, _blowerColBuffer, rot);
-            //
-            // for (int i = 0; i < cols; i++)
-            // {
-            //     var h = _blowerColBuffer[i];
-            //     if (_activeWorld.TryGetState(h, out JoltBodyState s))
-            //     {
-            //         _activeWorld.AddForce(h, bf.CalculatePushFrom(s.Position));  
-            //     } 
-            // }
             if (!bf.IsActive) continue;
 
             int cols = _activeWorld.OverlapShape(bf.GetCurrentShapeTest(), _blowerColBuffer);

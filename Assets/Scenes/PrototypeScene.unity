@@ -456,6 +456,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -509,6 +517,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -614,6 +630,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -667,6 +691,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -720,6 +752,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -1225,6 +1265,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -1278,6 +1326,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
@@ -1440,6 +1496,14 @@ PrefabInstance:
       propertyPath: timeBetweenSpawns
       value: 0.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: debrisPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605365737496404574, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
+      propertyPath: 'debrisPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7781766027961063080, guid: 57ffeee6c4251494e9ef65bd51dd2521, type: 3}
     - target: {fileID: 4783818596126003115, guid: d66fa03f9aa0b6b468228062285b9d14, type: 3}
       propertyPath: m_Icon
       value: 
