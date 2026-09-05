@@ -48,11 +48,9 @@ public abstract class Blower : MonoBehaviour
 
     protected virtual void TickActive()
     {
-        
     }
     protected virtual void TickInactive()
     {
-        
     }
 
     protected void TransitionStatus(BlowerStatus newStatus)
